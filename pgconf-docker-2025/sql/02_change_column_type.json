@@ -1,0 +1,14 @@
+{
+  "name": "02_change_column_type",
+  "operations": [
+    {
+      "alter_column": {
+        "table": "users",
+        "column": "cost",
+        "type": "float",
+        "up": "cast (cost as float)",
+        "down": "int"
+      }
+    }
+  ]
+}

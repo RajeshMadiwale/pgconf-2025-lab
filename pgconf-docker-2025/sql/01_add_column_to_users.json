@@ -1,0 +1,25 @@
+{
+  "name": "01_add_column_to_users",
+  "operations": [
+    {
+      "add_column": {
+        "table": "users",
+        "column": {
+          "name": "email",
+          "type": "varchar(255)",
+          "nullable": true
+        }
+      }
+    },
+      {
+      "add_column": {
+        "table": "users",
+        "column": {
+          "name": "cost",
+          "type": "int",
+          "nullable": true
+        }
+      }
+    }
+  ]
+}

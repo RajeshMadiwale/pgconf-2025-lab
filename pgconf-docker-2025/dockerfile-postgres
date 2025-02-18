@@ -1,0 +1,151 @@
+#########################
+##Author: Rajesh AWS 
+#########################
+
+# Base image
+FROM postgres:latest
+
+# Metadata
+LABEL maintainer="pg raj"
+LABEL version="1.0"
+LABEL description="PostgreSQL with pgroll and pg-osc"
+
+# Arguments
+ARG PG_SERVER_VERSION=16
+ARG PG_SERVER_PORT=5432
+ARG PG_UNIX_SOCKET_DIR="/var/run/postgresql"
+ARG GOVERSION=1.24.0
+ARG ZIG_VERSION=0.11.0
+
+# Environment variables
+ENV PG_SERVER_PORT=${PG_SERVER_PORT}
+ENV PG_UNIX_SOCKET_DIR=${PG_UNIX_SOCKET_DIR}
+ENV PATH=/usr/lib/postgresql/${PG_SERVER_VERSION}/bin:$PATH:/usr/local/go/bin:/root/.cargo/bin:/usr/local/bin
+ENV PGDATA=/var/lib/postgresql/data
+ENV DEBIAN_FRONTEND=noninteractive
+ENV SHELL=/bin/bash
+
+# Create required directories
+RUN mkdir -p \
+    /var/lib/scripts \
+    /var/lib/config \
+    /var/lib/postgresql/archive \
+    && chmod 755 \
+    /var/lib/scripts \
+    /var/lib/config \
+    /var/lib/postgresql/archive \
+    && chown postgres:postgres /var/lib/postgresql/archive
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    postgresql-${PG_SERVER_VERSION} \
+    postgresql-client-${PG_SERVER_VERSION} \
+    postgresql-contrib-${PG_SERVER_VERSION} \
+    python3 \
+    python3-dev \
+    python3-pip \
+    vim \
+    procps \
+    wget \
+    make \
+    gcc \
+    unzip \
+    sudo \
+    git \
+    curl \
+    libc6-dev \
+    apt-transport-https \
+    ca-certificates \
+    pgxnclient \
+    bc \
+    build-essential \
+    libssl-dev \
+    krb5-multidev \
+    libkrb5-dev \
+    lsb-release \
+    apt-utils \
+    ruby-full \
+    postgresql-server-dev-${PG_SERVER_VERSION} \
+    postgresql-plpython3-${PG_SERVER_VERSION}
+
+# Install Zig
+RUN cd /tmp \
+    && wget https://ziglang.org/download/${ZIG_VERSION}/zig-linux-x86_64-${ZIG_VERSION}.tar.xz \
+    && tar xf zig-linux-x86_64-${ZIG_VERSION}.tar.xz \
+    && mv zig-linux-x86_64-${ZIG_VERSION} /usr/local/zig \
+    && rm zig-linux-x86_64-${ZIG_VERSION}.tar.xz \
+    && ln -s /usr/local/zig/zig /usr/local/bin/zig
+
+# Verify Zig installation
+RUN zig version
+
+# Install Go
+RUN set -eux \
+    && wget -q https://golang.org/dl/go${GOVERSION}.linux-amd64.tar.gz \
+    && tar -C /usr/local -xzf go${GOVERSION}.linux-amd64.tar.gz \
+    && rm go${GOVERSION}.linux-amd64.tar.gz 
+
+# Configure Go environment
+RUN echo 'export PATH=$PATH:/usr/local/go/bin' >> /root/.bashrc \
+    && echo 'export PATH=$PATH:/usr/local/zig' >> /root/.bashrc \
+    && /bin/bash -c "source /root/.bashrc" \
+    && go env -w GOPROXY=direct \
+    && go env -w GOSUMDB=off \
+    && go env -w CGO_ENABLED=1 \
+    && go env -w GOOS=linux \
+    && go env -w GOARCH=amd64 \
+    && go env -w CC="zig cc -target x86_64-linux-musl" \
+    && go env -w CXX="zig c++ -target x86_64-linux-musl"
+
+# Verify Go installation
+RUN go version
+
+# Install Rust
+RUN set -eux \
+    && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
+    && . $HOME/.cargo/env \
+    && rustup default stable
+
+# Install pgroll
+RUN set -eux \
+    && git clone https://github.com/xataio/pgroll.git \
+    && cd pgroll \
+    && go build -o pgroll \
+    && mv pgroll /usr/local/bin/ \
+    && cd .. \
+    && rm -rf pgroll
+
+# Install pg-osc
+RUN set -eux \
+    && git clone https://github.com/shayonj/pg-osc.git \
+    && cd pg-osc \
+    && gem install pg_online_schema_change \
+    && cd .. \
+    && rm -rf pg-osc
+    
+# Cleanup
+RUN apt-get clean \
+    && rm -rf \
+    /tmp/* \
+    /var/lib/apt/lists/* \
+    /var/tmp/*
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD pg_isready -U postgres || exit 1
+
+# Default port
+EXPOSE ${PG_SERVER_PORT}
+
+# Set work directory
+WORKDIR /var/lib/postgresql
+
+# Ensure proper permissions
+RUN mkdir -p /var/run/postgresql && chown -R postgres:postgres /var/run/postgresql && chmod 2777 /var/run/postgresql
+
+# Switch to postgres user
+USER root
+
+# Set entrypoint
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["postgres"]

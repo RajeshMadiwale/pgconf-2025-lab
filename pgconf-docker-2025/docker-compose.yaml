@@ -1,0 +1,36 @@
+#########################
+##Author: Rajesh AWS 
+#########################
+services:
+  postgres_pgconf:
+    image: pgconf/pgdatabase
+    container_name: postgres_pgconf
+    env_file:
+      - ./.env
+    environment:
+      - POSTGRES_USER=${PG_USERNAME}
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - POSTGRES_DB=${PG_DATABASE}
+      # - POSTGRES_HOST_AUTH_METHOD=${POSTGRES_HOST_AUTH_METHOD}
+      - POSTGRES_INITDB_ARGS=${POSTGRES_INITDB_ARGS}
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+      # copy the sql script to create tables
+      - ./sql/sample_sql.sql:/var/lib/scripts/sample_sql.sql
+      - ./sql/pg-osc.txt:/var/lib/scripts/pg-osc.txt
+      - ./sql/03_rename_table.json:/var/lib/scripts/03_rename_table.json
+      - ./sql/02_change_column_type.json:/var/lib/scripts/02_change_column_type.json
+      - ./sql/01_add_column_to_users.json:/var/lib/scripts/01_add_column_to_users.json
+      - ./config/postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./config/pg_hba.conf:/etc/postgresql/pg_hba.conf
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    restart: always
+    networks:
+      - postgres_pgconf
+
+networks:
+  postgres_pgconf:
+    driver: bridge
+

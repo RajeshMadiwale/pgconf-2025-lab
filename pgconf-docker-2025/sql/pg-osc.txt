@@ -1,0 +1,9 @@
+export PGPASSWORD=password
+
+pg-online-schema-change perform --alter-statement 'ALTER TABLE school ADD COLUMN "school_address" varchar(100); ALTER TABLE school ADD COLUMN "school_email" varchar(20);' --dbname "pgconf" --host "localhost" --username "postgres" --drop
+
+
+
+
+
+
