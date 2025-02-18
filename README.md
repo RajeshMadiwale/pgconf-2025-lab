@@ -24,8 +24,8 @@ Lab for __PGConf 2025 Training - Database Schema Changes With Minimal/No-Downtim
 
 ## Change to DOCKER directory
 ```
-git <need to add>
-cd  pgconf-docker-2025
+git clone https://github.com/RajeshMadiwale/pgconf-2025-lab.git
+cd  pgconf-2025-lab/pgconf-docker-2025
 ```
 ### Build Postgres container image 
 
