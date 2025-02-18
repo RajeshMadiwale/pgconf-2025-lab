@@ -157,8 +157,8 @@ You can also document commands to lint the code or run tests. These steps help t
 ## Authors and acknowledgment
 Show your appreciation to those who have contributed to the project.
 
-1. __Rajesh.M__(madiwale@amazon.com)
-2. __HariKrishna.B__(bkhari@amazon.com)
+1. __Rajesh.M__
+2. __HariKrishna.B__
 
 ## License
 For open source projects, say how it is licensed.
