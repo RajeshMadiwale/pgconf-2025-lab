@@ -19,6 +19,7 @@ services:
       - ./postgres-data:/var/lib/postgresql/data
       # copy the sql script to create tables
       - ./sql/sample_sql.sql:/var/lib/scripts/sample_sql.sql
+      - ./sql/monitor_db.sh:/var/lib/scripts/monitor_db.sh
       - ./sql/pg-osc.txt:/var/lib/scripts/pg-osc.txt
       - ./sql/03_rename_table.json:/var/lib/scripts/03_rename_table.json
       - ./sql/02_change_column_type.json:/var/lib/scripts/02_change_column_type.json
