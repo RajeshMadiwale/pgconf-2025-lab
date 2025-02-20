@@ -44,7 +44,7 @@ monitor_postgres() {
                     FROM pg_stat_activity blocked_activity
                     JOIN pg_stat_activity blocking_activity
                         ON blocking_activity.pid = ANY(pg_blocking_pids(blocked_activity.pid))
-                    WHERE blocked_activity.datname = 'pgconf';"
+                    WHERE blocked_activity.datname = '$pgdb';"
 }
 
 # Main monitoring loop
