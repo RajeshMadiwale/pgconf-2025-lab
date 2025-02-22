@@ -44,7 +44,7 @@ docker-compose up -d postgres_pgconf
 ```
 
 <!-- Adding Blockquote --> 
-> $`\textcolor{red}{\text{IMPORTANT}}`$ After you start the pgconf container, it will take atleast 5 minutes to load the data,ensure you start slave container once the pgconf initialized completely
+> $`\textcolor{red}{\text{IMPORTANT}}`$ After you start the pgconf container, it will take atleast 2 minutes to create the cluster.
 You can check the progress using below command 
 
 ```
