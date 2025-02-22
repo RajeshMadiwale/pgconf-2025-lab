@@ -135,7 +135,7 @@ pgroll complete --postgres-url postgres://postgres:password@localhost:5432/pgcon
 __Case-1 : Add multiple columns to table__
 
 ```
-export PGPASSWORD=password
+export PGPASSWORD=<enter password>
 
 pg-online-schema-change perform --alter-statement 'ALTER TABLE school ADD COLUMN "school_address" varchar(100); ALTER TABLE school ADD COLUMN "school_email" varchar(20);' --dbname "pgconf" --host "localhost" --username "postgres" --drop
 
