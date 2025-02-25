@@ -1,4 +1,4 @@
-# pgconf-2025
+# pgconf-Lab-2025
 
 ## Name
 Lab for __PGConf 2025 Training - Database Schema Changes With Minimal/No-Downtime__
