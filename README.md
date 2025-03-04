@@ -3,7 +3,7 @@
 ## Name
 Lab for __PGConf 2025 Training - Database Schema Changes With Minimal/No-Downtime__
 
-# Pre-Req needs to be followed by participate
+# Pre-Req needs to be followed by participante
 1. Docker service should be installed in your laptop/Desktop
 2. Follow the steps from below links
     1. Ubuntu: [https://docs.docker.com/engine/install/ubuntu/](https://docs.docker.com/engine/install/ubuntu/)
@@ -64,9 +64,12 @@ postgres_pgconf  | 2025-02-17 16:02:02 UTC [1]: [2-1] user=,db=,app=,client= HIN
 
 ```
 docker exec -it postgres_pgconf  bash
+
+```
 sudo su - postgres
 ls -lrth /var/lib/scripts/
-
+```
+```
 postgres@54d3b64b453e:/var/lib/scripts$ ls -lrth
 -rw-r--r-- 1 postgres postgres  171 Feb 17 13:36 03_rename_table.json
 -rw-r--r-- 1 postgres postgres  230 Feb 17 13:36 02_change_column_type.json
@@ -74,12 +77,17 @@ postgres@54d3b64b453e:/var/lib/scripts$ ls -lrth
 -rw-rw-r-- 1 postgres postgres 2.2K Feb 17 14:19 sample_sql.sql
 -rw-r--r-- 0 postgres postgres  227 Feb 17 14:20 pg-osc.txt
 
-
+```
 Create tables in the pgconf database 
 
+```
 psql -d pgconf -f /var/lib/scripts/sample_sql.sql
+```
+
+```
 psql -d pgconf 
 
+```
 pgconf=# \dt
             List of relations
  Schema |    Name     | Type  |  Owner   
