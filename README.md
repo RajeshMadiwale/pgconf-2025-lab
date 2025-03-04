@@ -66,6 +66,8 @@ postgres_pgconf  | 2025-02-17 16:02:02 UTC [1]: [2-1] user=,db=,app=,client= HIN
 docker exec -it postgres_pgconf  bash
 
 ```
+
+```
 sudo su - postgres
 ls -lrth /var/lib/scripts/
 ```
