@@ -69,6 +69,7 @@ docker exec -it postgres_pgconf  bash
 sudo su - postgres
 ls -lrth /var/lib/scripts/
 ```
+
 ```
 postgres@54d3b64b453e:/var/lib/scripts$ ls -lrth
 -rw-r--r-- 1 postgres postgres  171 Feb 17 13:36 03_rename_table.json
@@ -78,7 +79,8 @@ postgres@54d3b64b453e:/var/lib/scripts$ ls -lrth
 -rw-r--r-- 0 postgres postgres  227 Feb 17 14:20 pg-osc.txt
 
 ```
-Create tables in the pgconf database 
+
+Create tables in the pgconf database
 
 ```
 psql -d pgconf -f /var/lib/scripts/sample_sql.sql
@@ -86,6 +88,7 @@ psql -d pgconf -f /var/lib/scripts/sample_sql.sql
 
 ```
 psql -d pgconf 
+```
 
 ```
 pgconf=# \dt
