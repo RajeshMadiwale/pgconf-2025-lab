@@ -3,7 +3,7 @@
 ## Name
 Lab for __PGConf 2025 Training - Database Schema Changes With Minimal/No-Downtime__
 
-# Pre-Req needs to be followed by participante
+# Pre-Req needs to be followed by participant
 1. Docker service should be installed in your laptop/Desktop
 2. Follow the steps from below links
     1. Ubuntu: [https://docs.docker.com/engine/install/ubuntu/](https://docs.docker.com/engine/install/ubuntu/)
